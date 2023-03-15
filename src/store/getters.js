@@ -18,7 +18,6 @@ const getters = {
   web3: state => state.web3.web3,
   netId: state => state.web3.netId,
   wallets: state => state.wallet.wallets,
-  wallet: state => state.wallet.wallet,
-  profile: state => state.user.profile
+  wallet: state => state.wallet.wallet
 }
 export default getters

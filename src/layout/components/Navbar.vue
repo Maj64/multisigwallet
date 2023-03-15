@@ -190,11 +190,8 @@ export default {
     async handleConfirm() {
       try {
         const profile = await confirmOtp({ keyConfirm: this.dataForm.otp, mail: this.dataForm.email })
-        const { data } = profile.data.data
-        console.log(data)
-        this.$store.dispatch('user/setProfile', data)
         this.$message({
-          message: 'Lấy thông tin thành công',
+          message: profile.data.data.data,
           type: 'success'
         })
       } catch (e) {

@@ -10,8 +10,7 @@ const state = {
   roles: [],
   signer: null,
   ethers: null,
-  provider: null,
-  profile: null
+  provider: null
 }
 
 const mutations = {
@@ -29,16 +28,10 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
-  },
-  SET_PROFILE: (state, profile) => {
-    state.profile = profile
   }
 }
 
 const actions = {
-  setProfile({ commit }, profile) {
-    commit('SET_PROFILE', profile)
-  },
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo

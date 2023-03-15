@@ -23,7 +23,7 @@
         </div>
       </template>
     </Table>
-    <Form :dialog-data="dialogData" :data-form="dataForm" :form-list="formData">
+    <Form :dialog-data="dialogData" :data-form="token" :form-list="formData">
       <template v-slot:footerDialog>
         <el-button type="info" class="btn-normal btn-cancel" plain>Huỷ</el-button>
         <el-button type="success" class="btn" @click="handleSubmit">Thêm mới</el-button>
