@@ -73,18 +73,20 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    hidden: true,
+    redirect: '/wallet',
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        path: 'wallet',
+        component: () => import('@/views/w/wallet'),
+        name: 'Wallet',
+        meta: { title: 'Wallet', icon: 'el-icon-wallet', affix: true }
       }
     ]
   },
   {
     path: '/documentation',
+    hidden: true,
     component: Layout,
     children: [
       {
@@ -194,25 +196,67 @@ export const asyncRoutes = [
   tableRouter,
 
   {
-    path: '/wallet',
+    path: '/:id/home',
     component: Layout,
     children: [
       {
-        path: 'list',
-        component: () => import('@/views/wallet/index'),
-        name: 'Wallet',
+        path: '',
+        component: () => import('@/views/w/home'),
+        name: 'Home',
+        meta: { title: 'Home', icon: 'el-icon-s-home', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/:id/token',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/w/token'),
+        name: 'Token',
         meta: {
-          title: 'Wallet',
-          icon: 'el-icon-wallet'
+          title: 'Token',
+          icon: 'el-icon-coin'
         }
       }
     ]
-
+  },
+  {
+    path: '/:id/owner',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/w/owner'),
+        name: 'Owner',
+        meta: {
+          title: 'Owner',
+          icon: 'el-icon-s-custom'
+        }
+      }
+    ]
+  },
+  {
+    path: '/:id/transaction',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/w/transaction'),
+        name: 'Transaction',
+        meta: {
+          title: 'Transaction',
+          icon: 'el-icon-guide'
+        }
+      }
+    ]
   },
 
   {
     path: '/example',
     component: Layout,
+    hidden: true,
     redirect: '/example/list',
     name: 'Example',
     meta: {
@@ -245,6 +289,7 @@ export const asyncRoutes = [
   {
     path: '/tab',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',

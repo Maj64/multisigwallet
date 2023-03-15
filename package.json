@@ -15,6 +15,7 @@
     "test:ci": "npm run lint && npm run test:unit"
   },
   "dependencies": {
+    "@truffle/contract": "^4.6.16",
     "axios": "0.18.1",
     "clipboard": "2.0.4",
     "codemirror": "5.45.0",
@@ -23,6 +24,7 @@
     "dropzone": "5.5.1",
     "echarts": "4.2.1",
     "element-ui": "2.13.2",
+    "ethers": "^5.7.2",
     "file-saver": "2.0.1",
     "fuse.js": "3.4.4",
     "js-cookie": "2.2.0",
@@ -41,6 +43,7 @@
     "vue-splitpane": "1.0.4",
     "vuedraggable": "2.20.0",
     "vuex": "3.1.0",
+    "web3": "^1.8.2",
     "xlsx": "0.14.1"
   },
   "devDependencies": {
@@ -54,6 +57,7 @@
     "babel-jest": "23.6.0",
     "babel-plugin-dynamic-import-node": "2.3.3",
     "chalk": "2.4.2",
+    "cheerio": "^1.0.0-rc.3",
     "chokidar": "2.1.5",
     "connect": "3.6.6",
     "eslint": "6.7.2",
@@ -86,9 +90,8 @@
   "keywords": [
     "vue",
     "admin",
-    "dashboard",
+    "web3",
     "element-ui",
-    "boilerplate",
     "admin-template",
     "management-system"
   ],

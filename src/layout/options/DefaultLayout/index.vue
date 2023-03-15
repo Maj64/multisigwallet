@@ -1,8 +1,8 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <div v-if="displaySidebar"><sidebar class="sidebar-container" /></div>
-    <div :class="[{hasTagsView:needTagsView}, displaySidebar ? 'main-container' : 'main-container-no-margin']">
+    <sidebar class="sidebar-container" />
+    <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
         <tags-view v-if="needTagsView" />
@@ -11,21 +11,6 @@
       <right-panel v-if="showSettings">
         <settings />
       </right-panel>
-      <footer>
-        <div class="copyright">
-          <div class="container">
-            <div class="row">
-              <span>Tee platform</span>
-            </div>
-            <div class="row">
-              <span>Copyright © 2023</span>
-            </div>
-            <div class="row">
-              <span>Contact us: 0977948802</span>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   </div>
 </template>
@@ -34,7 +19,7 @@
 import RightPanel from '@/components/RightPanel'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Layout',
@@ -47,23 +32,15 @@ export default {
     TagsView
   },
   mixins: [ResizeMixin],
-  data() {
-    return {
-      noMargin: ''
-    }
-  },
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,
       device: state => state.app.device,
-      displaySidebar: state => state.app.displaySidebar,
+      showSidebar: state => state.app.showSidebar,
       showSettings: state => state.settings.showSettings,
       needTagsView: state => state.settings.tagsView,
       fixedHeader: state => state.settings.fixedHeader
     }),
-    ...mapGetters([
-      'setWalletID'
-    ]),
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
@@ -73,21 +50,9 @@ export default {
       }
     }
   },
-  mounted() {
-    this.renderPage()
-  },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    },
-    renderPage() {
-      const route = this.$route
-      const { path } = route
-      if (path === '/wallet') {
-        this.$store.dispatch('app/displaySidebar', false)
-      } else {
-        this.$store.dispatch('app/displaySidebar', true)
-      }
     }
   }
 }
@@ -143,26 +108,11 @@ export default {
     width: calc(100% - 54px)
   }
 
-  .main-container-no-margin .fixed-header {
-    width: 100%;
-  }
-
   .mobile .fixed-header {
     width: 100%;
   }
 
   .sidebar-container {
     border-right: 1px solid rgb(48, 48, 51);
-  }
-
-  .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1c1c1c;
-    color: rgba(255, 255, 255, 0.8);
-    border-top: solid 1px #303033;
-    height: 64px;
-    padding: 8px;
   }
 </style>

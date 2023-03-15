@@ -105,6 +105,15 @@
 
 // dropdown
 .el-dropdown-menu {
+  min-width: 10%;
+  .el-dropdown-menu__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .el-icon-wallet {
+      margin-right: 20px;
+    }
+  }
   a {
     display: block
   }
@@ -114,8 +123,34 @@
 .el-range-editor.el-input__inner {
   display: inline-flex !important;
 }
+.el-input__inner {
+  color: rgb(255, 255, 255);
+  border-color: rgb(99, 102, 105);
+  background-color: transparent;
+  &:hover {
+    border-color: rgb(255, 255, 255);
+  }
+  &:focus {
+    border-color: rgb(18, 255, 128);
+  }
+}
+
+.el-input.is-disabled .el-input__inner {
+  color: #636669;
+  border-color: #636669;
+  background-color: transparent;
+}
 
 // to fix el-date-picker css style
 .el-range-separator {
   box-sizing: content-box;
+}
+
+// to fix el-form css style
+.el-form-item__label {
+  color:rgb(255, 255, 255);
+  font-size: 16px;
+  line-height: 1.4375em;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 400;
 }

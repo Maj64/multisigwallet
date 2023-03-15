@@ -9,6 +9,10 @@
     position: relative;
   }
 
+  .main-container-no-margin {
+    margin-left: 0px;
+  }
+
   .sidebar-container {
     transition: width 0.28s;
     width: $sideBarWidth !important;

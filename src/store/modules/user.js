@@ -7,7 +7,11 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  signer: null,
+  ethers: null,
+  provider: null,
+  profile: null
 }
 
 const mutations = {
@@ -25,10 +29,16 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_PROFILE: (state, profile) => {
+    state.profile = profile
   }
 }
 
 const actions = {
+  setProfile({ commit }, profile) {
+    commit('SET_PROFILE', profile)
+  },
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
@@ -70,6 +80,45 @@ const actions = {
         reject(error)
       })
     })
+  },
+
+  async getEthers({ commit }) {
+    if (window.ethereum) {
+      try {
+        const account = await window.ethereum.request({ method: 'eth_requestAccounts' })
+        console.log(account)
+
+        if (!state.ethers) {
+          console.log('ethers undefined')
+        } else {
+          const provider = new state.ethers.providers.Web3Provider(window.ethereum)
+          const signer = provider.getSigner()
+          commit('SET_PROVIDER', provider)
+          commit('SET_SIGNER', signer)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    } else {
+      console.error('Metamask not found')
+    }
+  },
+
+  // get connection info
+  async connectWallet({ commit }) {
+    try {
+      const { ethereum } = window
+      if (!ethereum) {
+        alert('Get MetaMask!')
+        return
+      }
+      const accounts = await ethereum.request({
+        method: 'eth_requestAccounts'
+      })
+      commit('SET_ACCOUNT', accounts[0])
+    } catch (error) {
+      console.log(error)
+    }
   },
 
   // user logout
