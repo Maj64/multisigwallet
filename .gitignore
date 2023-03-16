@@ -22,5 +22,5 @@ selenium-debug.log
 package-lock.json
 yarn.lock
 
-[https] proxy = localhost:9527
-[http] proxy = localhost:9527
+[https] proxy = https://222.255.238.183:9527
+[http] proxy = http://222.255.238.183:9527
