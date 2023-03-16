@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
@@ -171,31 +171,63 @@ export default {
   },
   watch: {
     account: function(newAccount, oldAccount) {
-      this.profile.address = this.shortenString(newAccount)
+      this.profile.address = newAccount ? this.shortenString(newAccount) : this.shortenString(oldAccount)
     }
   },
   mounted() {
     this.$store.dispatch('web3/getConnectionInfo')
     // this['web3/getConnectionInfo']()
-    this.reload()
+    this.reloadData()
   },
   methods: {
-    ...mapActions(['web3/getConnectionInfo']),
-    reload() {
-      this.profile.address = this.account && this.shortenString(this.account)
+    reloadData() {
+      const profile = this.$store.getters.profile
+      const account = this.$store.getters.account
+      this.profile = {
+        name: profile ? profile.fullName : '',
+        address: this.shortenString(account) || '',
+        wallet: 'Metamask',
+        connectedNetwork: 'Goerli'
+      }
+    },
+    resetData() {
+      this.dialogEmailData = {
+        title: '',
+        dialogVisible: false,
+        template: 'footerDialog',
+        type: null,
+        action: null,
+        nested: false
+      }
+      this.dataForm = {}
+      this.inputFormList = []
     },
     handleCancel() {
-
+      this.resetData()
     },
     async handleConfirm() {
       try {
         const profile = await confirmOtp({ keyConfirm: this.dataForm.otp, mail: this.dataForm.email })
+        const { defaultClaim } = profile?.data?.data?.data
+        console.log(defaultClaim)
+        this.$store.dispatch('user/setProfile', defaultClaim)
+        this.profile = {
+          name: defaultClaim.fullName,
+          address: this.shortenString(this.$store.getters.account),
+          wallet: 'Metamask',
+          connectedNetwork: 'Goerli'
+        }
+        this.dialogEmailData = {
+          ...this.dialogEmailData,
+          dialogVisible: false
+        }
+        this.resetData()
         this.$message({
-          message: profile.data.data.data,
+          message: 'Lấy thông tin thành công',
           type: 'success'
         })
       } catch (e) {
-        console.log(e.data.msg)
+        console.log(e)
         this.$message({
           message: e.message,
           type: 'warning'
@@ -204,7 +236,7 @@ export default {
     },
     async handleSubmit() {
       this.dataForm = {
-        email: this.dataForm.email,
+        ...this.dataForm,
         otp: ''
       }
       this.dialogEmailData = {
@@ -231,6 +263,7 @@ export default {
       })
     },
     handleShow() {
+      const profile = this.$store.getters.profile
       this.dialogEmailData = {
         ...this.dialogEmailData,
         title: 'Kết nối ID',
@@ -241,7 +274,7 @@ export default {
         nested: true
       }
       this.dataForm = {
-        email: 'tao.duongkhac@gmail.com'
+        email: profile ? profile.email : ''
       }
       this.inputFormList = [
         { type: 'text', label: 'Email', field: 'email' }
@@ -528,6 +561,9 @@ export default {
       }
 
       .profile-name {
+        white-space: nowrap;
+        inline-size: 129px;
+        overflow: hidden;
         font-size: 18px;
         font-weight: 700;
         line-height: 1.1;

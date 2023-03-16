@@ -198,7 +198,7 @@ export default {
         type: null
       }
       this.dataForm = {}
-      this.formData = {}
+      this.formData = []
     },
     handleAdd() {
       this.dialogData = {
