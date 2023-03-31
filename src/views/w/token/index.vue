@@ -46,6 +46,10 @@ import {
   submitTransaction
 } from '@/api/wallet'
 
+import {
+  transferToken
+} from '@/api/token'
+
 export default {
   name: 'Token',
   components: {
@@ -152,8 +156,8 @@ export default {
         action: 'withdraw'
       }
       this.dataForm = {
-        tokenName: rawData.address,
-        tokenAddress: rawData.name,
+        tokenName: rawData.name,
+        tokenAddress: rawData.address,
         walletName: wallet.name,
         walletAddress: wallet.address
       }
@@ -201,7 +205,7 @@ export default {
     },
     async deposit() {
       try {
-        const { amount } = this.dataForm
+        const { amount, address } = this.dataForm
         if (!this.web3) {
           this.$message({
             message: 'You must unlock Metamask',
@@ -213,6 +217,11 @@ export default {
         const value = Web3.utils.toBN(amount)
         const zero = Web3.utils.toBN(0)
         if (value.gt(zero)) {
+          await transferToken(this.web3, this.account, {
+            token: address,
+            value: amount,
+            destination: this.$store.getters.wallet.address
+          })
           this.$message({
             message: 'Nạp tiền vào ví thành công',
             type: 'success'
@@ -282,6 +291,14 @@ export default {
       switch (this.dialogData.type) {
         case 'add': {
           this.handleCreateToken()
+          break
+        }
+        case 'withdraw': {
+          this.withdrawToken()
+          break
+        }
+        case 'deposit': {
+          this.deposit()
           break
         }
         default:

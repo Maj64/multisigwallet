@@ -1,10 +1,6 @@
 <template>
-  <div
-    v-loading.lock="loadingTable"
-    class="app-container"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
-  >
+  <div v-loading.lock="loadingTable" class="app-container" element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)">
     <div class="feature-container">
       <div class="feature-header">Wallet</div>
       <div class="feature-item">
@@ -20,12 +16,10 @@
       </template>
       <template v-slot:action="{ rowData }">
         <div class="action">
-          <div class="action-item"><button
-            class="btn-size deposit-btn btn-normal"
-            @click.stop="handleDeposit(rowData)"
-          >Nạp tiền</button></div>
+          <div class="action-item"><button class="btn-size deposit-btn btn-normal"
+              @click.stop="handleDeposit(rowData)">Nạp tiền</button></div>
           <div class="action-item"><button class="btn withdraw-btn" @click.stop="handleWithdraw(rowData)">Rút
-            tiền</button></div>
+              tiền</button></div>
         </div>
       </template>
     </Table>
@@ -124,11 +118,12 @@ export default {
     ...mapGetters([
       'provider',
       'account',
-      'web3'
+      'web3',
+      'profile'
     ])
   },
   watch: {
-    account: function(newAccount, oldAccount) {
+    account: function (newAccount, oldAccount) {
       this.getWalletListData(newAccount)
     }
   },
@@ -164,7 +159,6 @@ export default {
       }
     },
     async getWalletListData(account) {
-      // const account = this.$store.getters.account
       try {
         if (!account) {
           return false
@@ -182,7 +176,10 @@ export default {
         this.loadingTable = false
       } catch (error) {
         this.loadingTable = false
-        console.log(error)
+        this.$message({
+          message: error.message,
+          type: 'warning'
+        })
       }
     },
     handleRowClick(rowData) {
@@ -201,6 +198,8 @@ export default {
       this.formData = []
     },
     handleAdd() {
+      const profile = this.$store.getters.profile
+      const ownerCurrentAddress = this.account
       this.dialogData = {
         title: 'Tạo mới ví đa chữ ký',
         dialogVisible: true,
@@ -210,10 +209,20 @@ export default {
       this.dataForm = {
         ...this.wallet,
         owners: [{
-          name: '',
-          address: ''
+          name: profile ? profile.fullName : 'Anonymous',
+          address: ownerCurrentAddress
         }]
       }
+      this.wallet = {
+        ...this.wallet,
+        owners: [
+          {
+            name: profile ? profile.fullName : 'Anonymous',
+            address: ownerCurrentAddress
+          }
+        ]
+      }
+      console.log(this.dataForm)
       this.formData = [...this.formList]
     },
     handleCancel() {
@@ -232,7 +241,7 @@ export default {
         const { name, numConfirmationsRequired } = this.dataForm
         const ownerAddressList = this.wallet.owners.map((i) => i.address)
         const ownerNameList = this.wallet.owners.map(i => i.name)
-
+        console.log(this.dataForm)
         if (this.web3) {
           const wallet = await createWallet(this.web3, this.account, {
             name,
