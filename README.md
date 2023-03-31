@@ -28,7 +28,7 @@ This will automatically open http://localhost:9527
 
 ## Online Demo
 
-[Preview](https://panjiachen.github.io/vue-element-admin)
+[Preview](https://maj64.github.io/multisigwallet)
 
 ### Wallet page
 ![wallet page](./public/main_wallet.png)
