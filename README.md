@@ -26,9 +26,7 @@ npm run dev
 ```
 This will automatically open http://localhost:9527
 
-## Online Demo
-
-[Preview](https://maj64.github.io/multisigwallet)
+## Demo
 
 ### Wallet page
 ![wallet page](./public/main_wallet.png)
